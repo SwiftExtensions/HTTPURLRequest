@@ -12,6 +12,7 @@
     - [`String` path](#Request-with-%60String%60-path)
     - [`URL`](#Request-with-%60URL%60)
     - [`URLRequest`](#Request-with-%60URLRequest%60)
+        - [`HTTPHeader`](#%60HTTPHeader%60)
 - [Making Requests](#Making-Requests)
     - [`Decodable`](#Making-%60Decodable%60-Requests)
     - [`jsonObject`](#Making-%60jsonObject%60-Requests)
@@ -70,6 +71,21 @@ let request = HTTPURLRequest(url: url)
 let url = URL(string: "http://example.com/")!
 let urlRequest = URLRequest(url: url)
 let request = HTTPURLRequest(request: urlRequest)
+```
+
+[Go to content](#Content)
+
+#### `HTTPHeader`
+**HTTPHeader** is a syntactic sugar of using HTTP headers field in URLRequest.
+```swift
+let url = URL(string: "http://example.com/")!
+var urlRequest = URLRequest(url: url)
+urlRequest.setHTTPHeader(.contentType)
+let request = HTTPURLRequest(request: urlRequest)
+
+extension HTTPHeader {
+    static let contentType = HTTPHeader(name: "Content-Type", value: "text/html")
+}
 ```
 
 [Go to content](#Content)
