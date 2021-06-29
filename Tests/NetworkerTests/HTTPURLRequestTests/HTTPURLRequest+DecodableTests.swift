@@ -23,7 +23,7 @@ extension HTTPURLRequestTests {
         return (calledCompletion, receivedDecoded, receivedError)
     }
     
-    func test_decodingDataTask_givenInvalidData_callsCompletionWithFailure() {
+    func test_decodingDataTask_givenInvalidData_callsFailure() {
         let result = self.runDecodableDataTask(type: TestJSON.self, data: Data(), self.response(200))
 
         XCTAssertTrue(result.calledCompletion)
@@ -31,7 +31,7 @@ extension HTTPURLRequestTests {
         XCTAssertNotNil(result.error)
     }
     
-    func test_decodingDataTask_validData_callsCompletionWithSuccess() throws {
+    func test_decodingDataTask_validData_callsSuccess() throws {
         let jsonData = Data(jsonString.utf8)
         let result = self.runDecodableDataTask(type: TestJSON.self, data: jsonData, self.response(200))
 
