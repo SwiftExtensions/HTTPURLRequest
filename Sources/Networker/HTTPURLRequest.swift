@@ -38,7 +38,9 @@ public struct HTTPURLRequest {
     /// and calls a handler upon completion.
     ///
     /// Newly-initialized tasks start the task immediately.
-    /// - Parameter completion: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
+    /// - Parameters:
+    ///   - dispatchQueue: A dispatch queue for completion handlers. Method uses a system-provided URLSession delegate if `nil`.
+    ///   - completion: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
     ///
     /// - Warning: Don't forget to pass the response to the main thread if necessary, as requests are executed in the background thread.
     /// ```
@@ -66,8 +68,8 @@ public struct HTTPURLRequest {
     /// # UIImage
     /// To get `UIImage` value from `response` (pass `response` to the main thread when working with `UI`):
     /// ```
-    /// let data: Data? = response.success?.data
-    /// DispatchQueue.main.async {
+    /// request.dataTask(dispatchQueue: .main) { response in
+    ///     let data: Data? = response.success?.data
     ///     let image: UIImage? = data?.image
     ///     ...
     /// }
@@ -90,9 +92,22 @@ public struct HTTPURLRequest {
     /// ```
     /// For more information about `JSON in Swift`, see [Working with JSON in Swift](https://developer.apple.com/swift/blog/?id=37).
     @discardableResult
-    public func dataTask(completion: @escaping Completion) -> URLSessionDataTask {
+    public func dataTask(
+        dispatchQueue: DispatchQueue? = nil,
+        completion: @escaping Completion) -> URLSessionDataTask
+    {
         let task = self.session.dataTask(with: self.request) { (data, response, error) in
-            DataTaskHandler(data: data, response: response, error: error, completionHandler: completion).execute()
+            let dataTaskHandler = DataTaskHandler(
+                data: data,
+                response: response,
+                error: error,
+                completionHandler: completion)
+            
+            if let dispatchQueue = dispatchQueue {
+                dispatchQueue.async { dataTaskHandler.execute() }
+            } else {
+                dataTaskHandler.execute()
+            }
         }
         
         task.resume()

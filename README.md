@@ -126,8 +126,8 @@ let string: String? = data?.utf8String
 ```
 To get `UIImage` value from `response` (_pass `response` to the main thread when working with `UI`_):
 ```swift
-let data: Data? = response.success?.data
-DispatchQueue.main.async {
+request.dataTask(dispatchQueue: .main) { response in
+    let data: Data? = response.success?.data
     let image: UIImage? = data?.image
     ...
 }
