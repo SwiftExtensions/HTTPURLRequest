@@ -1,7 +1,7 @@
 import XCTest
 @testable import Networker
 
-class DataTests: XCTestCase {
+final class DataTests: XCTestCase {
     var sut: Data!
 
     func test_utf8String_createsCorrectString() {
