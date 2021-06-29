@@ -165,21 +165,13 @@ public struct HTTPURLRequest {
             let decodableResult: DecodableResult<T>
             switch response {
             case let .success(result):
-                switch result.data.decoding(type: T.self, decoder: decoder) {
-                case let .success(decoded):
-                    let decodableResponse = DecodableResponse(decoded: decoded, response: result.response)
-                    decodableResult = .success(decodableResponse)
-                case let .failure(error):
-                    decodableResult = .failure(error)
-                }
+                decodableResult = result.decoding(type: T.self, decoder: decoder)
             case let .failure(error):
                 decodableResult = .failure(error)
             }
             
             if let dispatchQueue = dispatchQueue {
-                dispatchQueue.async {
-                    completion(decodableResult)
-                }
+                dispatchQueue.async { completion(decodableResult) }
             } else {
                 completion(decodableResult)
             }
