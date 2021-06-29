@@ -21,18 +21,18 @@ struct DataTaskHandler {
     
     /// Executes URL session data task handling.
     func execute() {
-        if let error = error {
+        if let error = self.error {
             self.completionHandler(.failure(error))
             return
         }
         
-        guard let data = data else {
+        guard let data = self.data else {
             let error = HTTPURLRequest.Error.emptyData
             self.completionHandler(.failure(error))
             return
         }
         
-        guard let httpResponse = response as? HTTPURLResponse else {
+        guard let httpResponse = self.response as? HTTPURLResponse else {
             let error = HTTPURLRequest.Error.unknownResponse
             self.completionHandler(.failure(error))
             return
