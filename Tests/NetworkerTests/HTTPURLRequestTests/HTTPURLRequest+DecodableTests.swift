@@ -40,5 +40,21 @@ extension HTTPURLRequestTests {
         XCTAssertNil(result.error)
     }
     
+    @available(iOS 10.0, *)
+    func test_decodingDataTask_callsInCorrectDispatchQueue() {
+        let jsonData = Data(jsonString.utf8)
+        let targetQueue = DispatchQueue(label: #function)
+
+        let expectation = self.expectation(description: #function)
+        self.sut.dataTask(decoding: TestJSON.self, dispatchQueue: targetQueue) { result in
+            dispatchPrecondition(condition: .onQueue(targetQueue))
+            expectation.fulfill()
+        }
+
+        self.session.lastTask?.completionHandler(jsonData, self.response(200), nil)
+        
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
     
 }

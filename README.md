@@ -155,7 +155,9 @@ let jsonObject: Any? = data?.json().success
 struct Product: Decodable {
     let title: String
 }
-request.dataTask(decoding: Product.self) { response in
+let decoder = JSONDecoder()
+decoder.keyDecodingStrategy = .convertFromSnakeCase
+request.dataTask(decoding: Product.self, decoder: decoder, dispatchQueue: .main) { response in
     switch response {
     case let .success(result):
         print(result.decoded)

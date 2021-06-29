@@ -8,7 +8,8 @@ import Foundation
 ///  to send the request to a server.
 public struct HTTPURLRequest {
     public typealias Completion = (Result<DataResponse, Swift.Error>) -> Void
-    public typealias DecodableCompletion<T: Decodable> = (Result<DecodableResponse<T>, Swift.Error>) -> Void
+    public typealias DecodableResult<T: Decodable> = Result<DecodableResponse<T>, Swift.Error>
+    public typealias DecodableCompletion<T: Decodable> = (DecodableResult<T>) -> Void
     public typealias JSONCompletion = (Result<JSONResponse, Swift.Error>) -> Void
     public typealias ImageCompletion = (Result<ImageResponse, Swift.Error>) -> Void
     
@@ -129,24 +130,60 @@ public struct HTTPURLRequest {
     ///   - decoding: Decoded type.
     ///   - decoder: An object that decodes instances of a data type from JSON objects (optional).
     ///   - completion: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
+    ///   - dispatchQueue: A dispatch queue for completion handlers. Method uses a system-provided URLSession delegate if `nil`.
+    /// - Returns: The new session data task.
+    ///
+    /// # Making Decodable Requests
+    /// ```swift
+    /// struct Product: Decodable {
+    ///     let title: String
+    /// }
+    ///
+    /// let decoder = JSONDecoder()
+    /// decoder.keyDecodingStrategy = .convertFromSnakeCase
+    /// request.dataTask(
+    ///     decoding: Product.self,
+    ///     decoder: decoder,
+    ///     dispatchQueue: .main)
+    /// { response in
+    ///     switch response {
+    ///     case let .success(result):
+    ///         print(result.decoded)
+    ///     case let .failure(error):
+    ///         print(error)
+    ///     }
+    /// }
+    /// ```
     @discardableResult
-    public func dataTask<T: Decodable>(decoding: T.Type, decoder: JSONDecoder = JSONDecoder(), completion: @escaping DecodableCompletion<T>) -> URLSessionDataTask {
-        let task = self.dataTask { response in
+    public func dataTask<T: Decodable>(
+        decoding: T.Type,
+        decoder: JSONDecoder = JSONDecoder(),
+        dispatchQueue: DispatchQueue? = nil,
+        completion: @escaping DecodableCompletion<T>) -> URLSessionDataTask
+    {
+        return self.dataTask { response in
+            let decodableResult: DecodableResult<T>
             switch response {
             case let .success(result):
                 switch result.data.decoding(type: T.self, decoder: decoder) {
                 case let .success(decoded):
                     let decodableResponse = DecodableResponse(decoded: decoded, response: result.response)
-                    completion(.success(decodableResponse))
+                    decodableResult = .success(decodableResponse)
                 case let .failure(error):
-                    completion(.failure(error))
+                    decodableResult = .failure(error)
                 }
             case let .failure(error):
-                completion(.failure(error))
+                decodableResult = .failure(error)
+            }
+            
+            if let dispatchQueue = dispatchQueue {
+                dispatchQueue.async {
+                    completion(decodableResult)
+                }
+            } else {
+                completion(decodableResult)
             }
         }
-        
-        return task
     }
     
     /// Creates a task that retrieves the contents of a URL based on the specified URL request object, converts JSON to the equivalent Foundation objects and calls a handler upon completion.
