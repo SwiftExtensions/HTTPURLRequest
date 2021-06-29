@@ -92,30 +92,7 @@ public struct HTTPURLRequest {
     @discardableResult
     public func dataTask(completion: @escaping Completion) -> URLSessionDataTask {
         let task = self.session.dataTask(with: self.request) { (data, response, error) in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data else {
-                let error = Error.emptyData
-                completion(.failure(error))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                let error = Error.unknownResponse
-                completion(.failure(error))
-                return
-            }
-            
-            let dataResponse = DataResponse(data: data, response: httpResponse)
-            if (200...299).contains(httpResponse.statusCode) {
-                completion(.success(dataResponse))
-            } else {
-                let error = Error.unsuccessfulHTTPStatusCode(dataResponse)
-                completion(.failure(error))
-            }
+            DataTaskHandler(data: data, response: response, error: error, completionHandler: completion).execute()
         }
         
         task.resume()
