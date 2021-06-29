@@ -34,7 +34,7 @@ extension HTTPURLRequestTests {
         XCTAssertTrue(lastTask.calledResume)
     }
 
-    func test_dataTask_givenError_callsCompletionWithFailure() {
+    func test_dataTask_givenError_callsFailure() {
         let expectedError = NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut)
 
         let result = self.runDataTask(data: Data(), self.response(200), expectedError)
@@ -69,7 +69,7 @@ extension HTTPURLRequestTests {
         HTTPURLResponse(url: self.url, statusCode: statusCode)
     }
 
-    func test_dataTask_emptyData_callsCompletionWithFailure() {
+    func test_dataTask_emptyData_callsFailure() {
         let result = self.runDataTask(data: nil, self.response(200))
         let expectedError = HTTPURLRequest.Error.emptyData
 
@@ -79,7 +79,7 @@ extension HTTPURLRequestTests {
         XCTAssertEqual(actualError, expectedError)
     }
 
-    func test_dataTask_unknownResponse_callsCompletionWithFailure() {
+    func test_dataTask_unknownResponse_callsFailure() {
         let result = self.runDataTask(data: Data())
         let expectedError = HTTPURLRequest.Error.unknownResponse
 
@@ -103,12 +103,27 @@ extension HTTPURLRequestTests {
         XCTAssertEqual(actualError, expectedError)
     }
 
-    func test_dataTask_givenDataAndSuccessResponseStatusCode_callsCompletionWithSuccess() throws {
+    func test_dataTask_givenDataAndSuccessResponseStatusCode_callsSuccess() throws {
         let result = self.runDataTask(data: Data(), self.response(200))
 
         XCTAssertTrue(result.calledCompletion)
         XCTAssertNotNil(result.data)
         XCTAssertNil(result.error)
+    }
+    
+    @available(iOS 10.0, *)
+    func test_dataTask_callsInCorrectDispatchQueue() {
+        let targetQueue = DispatchQueue(label: #function)
+
+        let expectation = self.expectation(description: #function)
+        self.sut.dataTask(dispatchQueue: targetQueue) { result in
+            dispatchPrecondition(condition: .onQueue(targetQueue))
+            expectation.fulfill()
+        }
+
+        self.session.lastTask?.completionHandler(Data(), self.response(200), nil)
+        
+        waitForExpectations(timeout: 1, handler: nil)
     }
     
     
