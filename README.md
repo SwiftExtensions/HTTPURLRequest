@@ -91,9 +91,9 @@ extension HTTPHeader {
 [Go to content](#Content)
 
 ## Making Requests
-> **Warning**. Don't forget to pass the response to the main thread if necessary, as requests are executed in the background thread.
+> **Warning**. Don't forget to set `dispatchQueue` to pass the response to the main thread if necessary, as requests are executed in the background thread.
 ```swift
-request.dataTask() { response in
+request.dataTask(dispatchQueue: .main) { response in
     switch response {
     case let .success(result):
         print(result)
