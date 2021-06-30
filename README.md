@@ -9,14 +9,14 @@
     - [CocoaPods](#CocoaPods)
     - [Swift Package Manager](#Swift-Package-Manager)
 - [Creating Request](#Creating-Request)
-    - [`String` path](#Request-with-%60String%60-path)
-    - [`URL`](#Request-with-%60URL%60)
-    - [`URLRequest`](#Request-with-%60URLRequest%60)
-        - [`HTTPHeader`](#%60HTTPHeader%60)
+    - [`String` path](#Request-with-String-path)
+    - [`URL`](#Request-with-URL)
+    - [`URLRequest`](#Request-with-URLRequest)
+        - [`HTTPHeader`](HTTPHeader)
 - [Making Requests](#Making-Requests)
-    - [`Decodable`](#Making-%60Decodable%60-Requests)
-    - [`jsonObject`](#Making-%60jsonObject%60-Requests)
-    - [`Image`](#Making-%60Image%60-Requests)
+    - [`Decodable`](#Making-Decodable-Requests)
+    - [`jsonObject`](#Making-jsonObject-Requests)
+    - [`Image`](#Making-Image-Requests)
 - [Unsuccessful HTTP status code](#Unsuccessful-HTTP-status-code)
 
 ## Installation
@@ -45,7 +45,7 @@ There are available 3 request options: with [`String`](https://developer.apple.c
 
 [Go to content](#Content)
 
-### Request with `String` path
+### Request with String path
 > **Warning**. If the path is empty string or has an invalid value an error is thrown: `HTTPURLRequest.Error.emptyPath` or `HTTPURLRequest.Error.invalidPath(path)` accordingly.
 ```swift
 let request = try? HTTPURLRequest(path: "http://example.com/")
@@ -58,7 +58,7 @@ print(result)
 
 [Go to content](#Content)
 
-### Request with `URL`
+### Request with URL
 ```swift
 let url = URL(string: "http://example.com/")!
 let request = HTTPURLRequest(url: url)
@@ -66,7 +66,7 @@ let request = HTTPURLRequest(url: url)
 
 [Go to content](#Content)
 
-### Request with `URLRequest`
+### Request with URLRequest
 ```swift
 let url = URL(string: "http://example.com/")!
 let urlRequest = URLRequest(url: url)
@@ -75,7 +75,7 @@ let request = HTTPURLRequest(request: urlRequest)
 
 [Go to content](#Content)
 
-#### `HTTPHeader`
+#### HTTPHeader
 **HTTPHeader** is a syntactic sugar of using HTTP headers field in URLRequest.
 ```swift
 let url = URL(string: "http://example.com/")!
@@ -150,7 +150,7 @@ let jsonObject: Any? = data?.json().success
 
 [Go to content](#Content)
 
-### Making `Decodable` Requests
+### Making Decodable Requests
 ```swift
 struct Product: Decodable {
     let title: String
@@ -191,7 +191,7 @@ request.dataTask(decoding: Product.self) { response in
 
 [Go to content](#Content)
 
-### Making `jsonObject` Requests
+### Making jsonObject Requests
 ```swift
 request.jsonDataTask() { response in
     switch response {
@@ -224,7 +224,7 @@ request.jsonDataTask() { response in
 
 [Go to content](#Content)
 
-### Making `Image` Requests
+### Making Image Requests
 > **Warning**. Don't forget to pass the response to the main thread when working with UI, as requests are executed in the background thread.
 ```swift
 request.imageDataTask() { response in
