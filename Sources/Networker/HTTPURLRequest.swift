@@ -11,7 +11,8 @@ public struct HTTPURLRequest {
     public typealias DecodableResult<T: Decodable> = Result<DecodableResponse<T>, Swift.Error>
     public typealias DecodableCompletion<T: Decodable> = (DecodableResult<T>) -> Void
     public typealias JSONCompletion = (Result<JSONResponse, Swift.Error>) -> Void
-    public typealias ImageCompletion = (Result<ImageResponse, Swift.Error>) -> Void
+    public typealias ImageResult = Result<ImageResponse, Swift.Error>
+    public typealias ImageCompletion = (ImageResult) -> Void
     
     /// A URL load request that is independent of protocol or URL scheme.
     public let request: URLRequest
@@ -196,29 +197,54 @@ public struct HTTPURLRequest {
         return task
     }
     
-    /// Creates a task that retrieves the contents of a URL based on the specified URL request object, converts JSON to the equivalent Foundation objects and calls a handler upon completion.
+    /// Creates a task that retrieves the contents of a URL based on the specified URL request object,
+    /// converts data to the equivalent ImageResponse object (_a container for UIImage and HTTPURLResponse_) and calls a handler upon completion.
     ///
     /// Newly-initialized tasks start the task immediately.
-    /// - Parameter completion: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
+    /// - Parameters:
+    ///   - dispatchQueue: A dispatch queue for completion handlers. Method uses a system-provided URLSession delegate if `nil`.
+    ///   - completion: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
+    ///
+    /// ## Making Image Requests
+    /// ```swift
+    /// request.imageDataTask(dispatchQueue: .main) { response in
+    ///     switch response {
+    ///     case let .success(result):
+    ///         let image: UIImage = result.image
+    ///         ...
+    ///     case let .failure(error):
+    ///         print(error)
+    ///     }
+    /// }
     @discardableResult
-    public func imageDataTask(completion: @escaping ImageCompletion) -> URLSessionDataTask {
-        let task = self.dataTask { response in
+    public func imageDataTask(
+        dispatchQueue: DispatchQueue? = nil,
+        completion: @escaping ImageCompletion) -> URLSessionDataTask
+    {
+        return self.dataTask { response in
+            let imageResult: ImageResult
             switch response {
             case let .success(result):
                 if let image = result.data.image {
                     let imageResponse = ImageResponse(image: image, response: result.response)
-                    completion(.success(imageResponse))
+                    imageResult = .success(imageResponse)
                 } else {
                     let error = Error.invalidImageData
-                    completion(.failure(error))
+                    imageResult = .failure(error)
                 }
             case let .failure(error):
-                completion(.failure(error))
+                imageResult = .failure(error)
+            }
+            
+            if let dispatchQueue = dispatchQueue {
+                dispatchQueue.async { completion(imageResult) }
+            } else {
+                completion(imageResult)
             }
         }
-        
-        return task
     }
+    
+    
 }
 
 // MARK: Initialization
@@ -261,4 +287,6 @@ public extension HTTPURLRequest {
         let request = url.urlRequest
         self.init(request: request, session: session)
     }
+    
+    
 }

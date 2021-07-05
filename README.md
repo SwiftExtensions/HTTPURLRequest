@@ -227,13 +227,11 @@ request.jsonDataTask() { response in
 ### Making Image Requests
 > **Warning**. Don't forget to pass the response to the main thread when working with UI, as requests are executed in the background thread.
 ```swift
-request.imageDataTask() { response in
+request.imageDataTask(dispatchQueue: .main) { response in
     switch response {
     case let .success(result):
-        DispatchQueue.main.async {
-            let image: UIImage = result.image
-            ...
-        }
+        let image: UIImage = result.image
+        ...
     case let .failure(error):
         print(error)
     }
@@ -252,12 +250,10 @@ struct ImageResponse {
 ```
 If you are only interested in data, you can use the `success` property from `response`:
 ```swift
-request.imageDataTask() { response in
+request.imageDataTask(dispatchQueue: .main) { response in
     let result: ImageResponse? = response.success
-    DispatchQueue.main.async {
-        let image: UIImage? = result?.image
-        ...
-    }
+    let image: UIImage? = result?.image
+    ...
 }
 ```
 

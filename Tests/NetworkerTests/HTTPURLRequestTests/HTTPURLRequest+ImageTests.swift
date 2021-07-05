@@ -23,7 +23,7 @@ extension HTTPURLRequestTests {
         return (calledCompletion, receivedImage, receivedError)
     }
     
-    func test_imageDataTask_givenInvalidData_callsCompletionWithFailure() {
+    func test_imageDataTask_givenInvalidData_callsFailure() {
         let result = self.runImageDataTask(data: Data(), self.response(200))
 
         XCTAssertTrue(result.calledCompletion)
@@ -31,7 +31,7 @@ extension HTTPURLRequestTests {
         XCTAssertNotNil(result.error)
     }
     
-    func test_imageDataTask_validData_callsCompletionWithSuccess() throws {
+    func test_imageDataTask_validData_callsSuccess() throws {
         let image = UIImage.create(with: .black, size: CGSize(width: 10, height: 10))
         let imageData = image!.pngData()
         let result = self.runImageDataTask(data: imageData, self.response(200))
@@ -39,6 +39,23 @@ extension HTTPURLRequestTests {
         XCTAssertTrue(result.calledCompletion)
         XCTAssertNotNil(result.image)
         XCTAssertNil(result.error)
+    }
+    
+    @available(iOS 10.0, *)
+    func test_imageDataTask_callsInCorrectDispatchQueue() {
+        let image = UIImage.create(with: .black, size: CGSize(width: 10, height: 10))
+        let imageData = image!.pngData()
+        let targetQueue = DispatchQueue(label: #function)
+
+        let expectation = self.expectation(description: #function)
+        self.sut.imageDataTask(dispatchQueue: targetQueue) { result in
+            dispatchPrecondition(condition: .onQueue(targetQueue))
+            expectation.fulfill()
+        }
+
+        self.session.lastTask?.completionHandler(imageData, self.response(200), nil)
+        
+        waitForExpectations(timeout: 1, handler: nil)
     }
     
     
