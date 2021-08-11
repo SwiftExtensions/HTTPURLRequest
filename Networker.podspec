@@ -1,5 +1,5 @@
 #
-#  Be sure to run `pod spec lint HTTPURLRequest.podspec' to ensure this is a
+#  Be sure to run `pod spec lint Networker.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
 #  To learn more about Podspec attributes see https://guides.cocoapods.org/syntax/podspec.html
@@ -15,9 +15,9 @@ Pod::Spec.new do |spec|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  spec.name         = "Networker"
-  spec.version      = "0.0.1"
-  spec.summary      = "Networker library is an easy way of an HTTP networking in Swift."
+  spec.name         = 'Networker'
+  spec.version      = '0.0.1'
+  spec.summary      = 'Networker library is an easy way of an HTTP networking in Swift.'
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -28,7 +28,7 @@ Pod::Spec.new do |spec|
   HTTPURLRequest keeps the information about the request using URLRequest and uses URLSession to send the request to a server.
                    DESC
 
-  spec.homepage     = "https://github.com/SwiftExtensions/HTTPURLRequest"
+  spec.homepage     = 'https://github.com/SwiftExtensions/HTTPURLRequest'
   # spec.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -39,7 +39,7 @@ Pod::Spec.new do |spec|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  spec.license      = { :type => "MIT", :file => "LICENSE" }
+  spec.license      = { :type => 'MIT', :file => 'LICENSE' }
   # spec.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
@@ -53,7 +53,7 @@ Pod::Spec.new do |spec|
   #  profile URL.
   #
 
-  spec.author             = { "Alexander Algashev" => "algashev@mail.ru" }
+  spec.author             = { 'Alexander Algashev' => 'algashev@mail.ru' }
   # Or just: spec.author    = "Alexander Algashev"
   # spec.authors            = { "Alexander Algashev" => "algashev@mail.ru" }
   # spec.social_media_url   = "https://twitter.com/Alexander Algashev"
@@ -64,9 +64,8 @@ Pod::Spec.new do |spec|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  # spec.platform     = :ios
-  spec.platform     = :ios, "9.0"
-  spec.swift_version = "5"
+  spec.platform     = :ios, '9.0'
+  spec.swift_version = '5.3'
 
   #  When using multiple platforms
   # spec.ios.deployment_target = "5.0"
@@ -81,7 +80,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/SwiftExtensions/HTTPURLRequest.git", :tag => "#{spec.version}" }
+  spec.source       = { :git => 'https://github.com/SwiftExtensions/HTTPURLRequest.git', :tag => '#{spec.version}' }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -92,7 +91,7 @@ Pod::Spec.new do |spec|
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "Sources/Networker/**/*.{h,m,swift}"
+  spec.source_files  = 'Sources/Networker/**/*.{h,m,swift}'
   # spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
