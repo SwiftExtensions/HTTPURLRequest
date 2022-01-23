@@ -1,14 +1,22 @@
 import Foundation
 
 public extension HTTPURLRequest {
+    /// HTTPURLRequest error.
     enum Error: Swift.Error, Equatable {
+        /// URL string is empty.
         case emptyPath
+        /// Invalid path for URL.
         case invalidPath(_ path: String)
+        /// There is no data in the server response.
         case emptyData
+        /// Server response was not recognized.
         case unknownResponse
+        /// Unsuccessful HTTP status code.
         case unsuccessfulHTTPStatusCode(_ dataResponse: DataResponse)
+        /// Unsupported data for image to initialize.
         case invalidImageData
         
+        /// Unsuccessful HTTP status code data.
         public var unsuccessfulHTTPStatusCodeData: DataResponse? {
             if case let Error.unsuccessfulHTTPStatusCode(httpData) = self {
                 return httpData
@@ -32,7 +40,7 @@ extension HTTPURLRequest.Error: LocalizedError {
             return NSLocalizedString(key, comment: "Invalid path for URL.")
         case .emptyData:
             let key = "There is no data in the server response."
-            return NSLocalizedString(key, comment: "Data is not available.")
+            return NSLocalizedString(key, comment: "No data responses.")
         case .unknownResponse:
             let key = "Server response was not recognized."
             return NSLocalizedString(key, comment: "Unable to recognize the response.")
@@ -44,6 +52,8 @@ extension HTTPURLRequest.Error: LocalizedError {
             let key = "Unsupported data for image to initialize."
             return NSLocalizedString(key, comment: "Invalid image data.")
         }
+        
+        
     }
     
     
