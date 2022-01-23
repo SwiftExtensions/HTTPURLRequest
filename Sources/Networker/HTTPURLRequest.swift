@@ -11,8 +11,11 @@ public struct HTTPURLRequest {
     public typealias DecodableResult<T: Decodable> = Result<DecodableResponse<T>, Swift.Error>
     public typealias DecodableCompletion<T: Decodable> = (DecodableResult<T>) -> Void
     public typealias JSONCompletion = (Result<JSONResponse, Swift.Error>) -> Void
+    
+    #if !os(macOS)
     public typealias ImageResult = Result<ImageResponse, Swift.Error>
     public typealias ImageCompletion = (ImageResult) -> Void
+    #endif
     
     /// A URL load request that is independent of protocol or URL scheme.
     public let request: URLRequest
@@ -197,6 +200,7 @@ public struct HTTPURLRequest {
         return task
     }
     
+    #if !os(macOS)
     /// Creates a task that retrieves the contents of a URL based on the specified URL request object,
     /// converts data to the equivalent ImageResponse object (_a container for UIImage and HTTPURLResponse_) and calls a handler upon completion.
     ///
@@ -243,6 +247,7 @@ public struct HTTPURLRequest {
             }
         }
     }
+    #endif
     
     
 }

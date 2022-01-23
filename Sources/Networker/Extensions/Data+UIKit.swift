@@ -1,4 +1,4 @@
-#if(!macOS)
+#if !os(macOS)
 import UIKit
 
 public extension Data {

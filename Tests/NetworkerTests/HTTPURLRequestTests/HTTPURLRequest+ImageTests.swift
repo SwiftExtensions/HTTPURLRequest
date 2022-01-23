@@ -1,3 +1,4 @@
+#if !os(macOS)
 import XCTest
 @testable import Networker
 
@@ -60,3 +61,4 @@ extension HTTPURLRequestTests {
     
     
 }
+#endif

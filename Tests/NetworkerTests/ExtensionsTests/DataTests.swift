@@ -11,6 +11,7 @@ final class DataTests: XCTestCase {
         XCTAssertEqual(string, self.sut.utf8String)
     }
     
+    #if !os(macOS)
     func test_image_createsCorrectImage() {
         let image = UIImage.create(with: .black, size: CGSize(width: 10, height: 10))
         self.sut = image?.pngData()
@@ -20,6 +21,7 @@ final class DataTests: XCTestCase {
         XCTAssertNotNil(actualImage)
         XCTAssertEqual(actualImage?.size, expectedImage?.size)
     }
+    #endif
     
     func test_json_invalidJSON_createsErrorValue() {
         self.sut = Data("INVALID".utf8)
@@ -55,4 +57,6 @@ final class DataTests: XCTestCase {
         XCTAssertNil(actualTestJSON.failure)
         XCTAssertEqual(actualTestJSON.success, expectedTestJSON)
     }
+    
+    
 }

@@ -1,3 +1,4 @@
+#if !os(macOS)
 import UIKit
 
 extension UIImage {
@@ -10,4 +11,7 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return image
     }
+    
+    
 }
+#endif

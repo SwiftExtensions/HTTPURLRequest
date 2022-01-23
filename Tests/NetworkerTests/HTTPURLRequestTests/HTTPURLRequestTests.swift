@@ -14,7 +14,7 @@ final class HTTPURLRequestTests: XCTestCase {
 extension HTTPURLRequestTests {
     func test_defaultInit_setsRequestAndSession() {
         let urlRequest = self.url.urlRequest
-        let session = URLSession()
+        let session = URLSession(configuration: .default)
         self.sut = HTTPURLRequest(request: urlRequest, session: session)
         
         XCTAssertNotNil(self.sut.request)
@@ -69,7 +69,7 @@ extension HTTPURLRequestTests {
     }
     
     func test_pathInit_setsRequestAndSession() {
-        let session = URLSession()
+        let session = URLSession(configuration: .default)
         self.sut = try! HTTPURLRequest(path: self.path, session: session)
         
         XCTAssertNotNil(self.sut.request)
@@ -114,8 +114,6 @@ typealias MockCompletion = (Data?, URLResponse?, Error?) -> Void
 class MockURLSession: URLSession {
     private (set) var lastRequest: URLRequest?
     private (set) var lastTask: MockURLSessionDataTask?
-    
-    override init() { }
     
     override func dataTask(with request: URLRequest, completionHandler: @escaping MockCompletion) -> URLSessionDataTask {
         self.lastRequest = request

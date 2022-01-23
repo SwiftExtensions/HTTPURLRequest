@@ -1,3 +1,4 @@
+#if !os(macOS)
 import UIKit
 
 /// The decoded message body (_or content_) image data and
@@ -10,3 +11,4 @@ public struct ImageResponse {
     
     
 }
+#endif
