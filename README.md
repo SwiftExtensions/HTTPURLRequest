@@ -31,7 +31,7 @@ pod 'Networker', git: 'https://github.com/SwiftExtensions/HTTPURLRequest.git'
 
 ### Swift Package Manager
 To add a package dependency to your Xcode project, select File > Swift Packages > Add Package Dependency and enter `Networker` repository URL:
-```
+```ruby
 https://github.com/SwiftExtensions/HTTPURLRequest.git
 ```
 You can also navigate to your target’s General pane, and in the “Frameworks, Libraries, and Embedded Content” section, click the + button, select Add Other, and choose Add Package Dependency.
