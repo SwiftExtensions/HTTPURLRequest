@@ -8,6 +8,7 @@
 - [Installation](#Installation)
     - [CocoaPods](#CocoaPods)
     - [Swift Package Manager](#Swift-Package-Manager)
+        - [Add as a Dependency on Another Swift Package](#Add-as-a-Dependency-on-Another-Swift-Package)
 - [Creating Request](#Creating-Request)
     - [`String` path](#Request-with-String-path)
     - [`URL`](#Request-with-URL)
@@ -30,6 +31,7 @@ pod 'Networker', git: 'https://github.com/SwiftExtensions/HTTPURLRequest.git'
 [Go to content](#Content)
 
 ### Swift Package Manager
+
 To add a package dependency to your Xcode project, select File > Swift Packages > Add Package Dependency and enter `Networker` repository URL:
 ```ruby
 https://github.com/SwiftExtensions/HTTPURLRequest.git
@@ -37,6 +39,44 @@ https://github.com/SwiftExtensions/HTTPURLRequest.git
 You can also navigate to your target’s General pane, and in the “Frameworks, Libraries, and Embedded Content” section, click the + button, select Add Other, and choose Add Package Dependency.
 
 For more information, see [`Adding Package Dependencies to Your App`](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app).
+
+[Go to content](#Content)
+
+#### Add as a Dependency on Another Swift Package
+
+To declare `HTTPURLRequest` as a dependency on a remote package you can use following example:
+```swift
+let package = Package(
+    name: "YOUR_PACKAGE",
+    products: [
+        // Products define the executables and libraries a package produces,
+        // and make them visible to other packages.
+        .library(
+            name: "YOUR_PACKAGE",
+            targets: ["YOUR_PACKAGE"]),
+    ],
+    dependencies: [
+        // Dependencies declare other packages that this package depends on.
+        .package(
+            name: "Networker",
+            url: "https://github.com/SwiftExtensions/HTTPURLRequest.git",
+            from: "0.0.1"),
+    ],
+    targets: [
+        // Targets are the basic building blocks of a package.
+        // A target can define a module or a test suite.
+        // Targets can depend on other targets in this package,
+        // and on products in packages this package depends on.
+        .target(
+            name: "YOUR_PACKAGE",
+            dependencies: ["Networker"]),
+        .testTarget(
+            name: "YOUR_PACKAGETests",
+            dependencies: ["YOUR_PACKAGE"]),
+    ]
+)
+```
+
 
 [Go to content](#Content)
 
