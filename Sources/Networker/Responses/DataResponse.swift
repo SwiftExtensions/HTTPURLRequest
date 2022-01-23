@@ -1,9 +1,9 @@
 import Foundation
 
-/// The message body (_or content_) and
+/// The raw message body (_or content_) data and
 /// the metadata associated with the response to an HTTP protocol URL load request.
 public struct DataResponse: Equatable {
-    /// The message body (_or content_).
+    /// The raw message body (_or content_) data.
     public let data: Data
     /// The metadata associated with the response to an HTTP protocol URL load request.
     public let response: HTTPURLResponse
