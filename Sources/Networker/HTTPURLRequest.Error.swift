@@ -29,7 +29,10 @@ public extension HTTPURLRequest {
     
 }
 
+// MARK: - LocalizedError
+
 extension HTTPURLRequest.Error: LocalizedError {
+    /// Text representation of ``HTTPURLRequest`` error.
     public var errorDescription: String? {
         switch self {
         case .emptyPath:
