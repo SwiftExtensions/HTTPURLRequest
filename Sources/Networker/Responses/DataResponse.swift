@@ -8,6 +8,17 @@ public struct DataResponse: Equatable {
     /// The metadata associated with the response to an HTTP protocol URL load request.
     public let response: HTTPURLResponse
     
+    /// Creates object of
+    /// the raw message body (_or content_) data and
+    /// the metadata associated with the response to an HTTP protocol URL load request.
+    /// - Parameters:
+    ///   - data: The raw message body (_or content_) data.
+    ///   - response: The metadata associated with the response to an HTTP protocol URL load request.
+    public init(data: Data, response: HTTPURLResponse) {
+        self.data = data
+        self.response = response
+    }
+    
     
 }
 
