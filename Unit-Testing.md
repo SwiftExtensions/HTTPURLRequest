@@ -150,6 +150,7 @@ final class LoaderTests: XCTestCase {
     }
     
     override func tearDownWithError() throws {
+        self.sut = nil
         self.mockSession = nil
     }
 }
