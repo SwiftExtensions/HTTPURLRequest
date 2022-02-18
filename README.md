@@ -19,6 +19,7 @@
     - [`jsonObject`](#Making-jsonObject-Requests)
     - [`Image`](#Making-Image-Requests)
 - [Unsuccessful HTTP status code](#Unsuccessful-HTTP-status-code)
+- [Unit-Testing](/Unit-Testing.md)
 
 ## Installation
 
@@ -317,4 +318,3 @@ request.dataTask() { response in
 ```
 
 [Go to content](#Content)
-
